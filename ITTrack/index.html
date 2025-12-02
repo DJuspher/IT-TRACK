@@ -21,6 +21,16 @@
     .kpi-small { font-size: .85rem; color: #64748b; }
     .trend-up { color: #16a34a; }
     .trend-down { color: #ef4444; }
+    /* --- DARK MODE --- */
+.dark body { background: #0f172a; color: #f1f5f9; }
+.dark .glass-card { background: #1e293b; border-color: #334155; }
+.dark header { background: #1e293b; border-color: #334155; }
+.dark nav button { color: #cbd5e1; }
+.dark table thead { background: #1e293b; }
+.dark table tbody tr:hover { background: #1e293b; }
+.dark table td { color: #e2e8f0 !important; }
+.dark footer { color: #94a3b8; }
+.dark .bg-gray-50 { background: #1e293b !important; }
   </style>
 </head>
 <body class="text-slate-800">
@@ -30,6 +40,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
+            <!-- Dark Mode Toggle -->
+<label class="flex items-center cursor-pointer">
+  <input type="checkbox" id="darkToggle" class="hidden">
+  <div class="w-12 h-6 bg-slate-300 rounded-full flex items-center p-1 transition-all duration-300" id="toggleTrack">
+    <div class="w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300" id="toggleThumb"></div>
+  </div>
+</label>
+
           <div class="w-11 h-11 bg-emerald-600 rounded-lg flex items-center justify-center text-white shadow-md">
             <!-- Cart icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"></circle><circle cx="20" cy="20" r="1"></circle><path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -397,6 +415,35 @@
         options: { responsive: true, plugins:{ legend: { position: 'bottom' } } }
       });
     }
+    // DARK MODE LOGIC
+const toggle = document.getElementById("darkToggle");
+const html = document.documentElement;
+const track = document.getElementById("toggleTrack");
+const thumb = document.getElementById("toggleThumb");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+  html.classList.add("dark");
+  toggle.checked = true;
+  track.classList.add("bg-emerald-500");
+  thumb.classList.add("translate-x-6");
+}
+
+// Toggle event
+toggle.addEventListener("change", () => {
+  if (toggle.checked) {
+    html.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+    track.classList.add("bg-emerald-500");
+    thumb.classList.add("translate-x-6");
+  } else {
+    html.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+    track.classList.remove("bg-emerald-500");
+    thumb.classList.remove("translate-x-6");
+  }
+});
+
   </script>
 
 </body>
