@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FreshCart Grocery - Performance Overview</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f6fafb; color: #0f172a; }
+    .glass-card { background: #fff; border: 1px solid #e6eef2; box-shadow: 0 6px 20px rgba(15,23,42,0.04); border-radius: 0.75rem; }
+    .tab-content { display: none; animation: fadeIn .35s ease-in; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to{ opacity: 1; transform: translateY(0);} }
+    .kpi-small { font-size: .85rem; color: #64748b; }
+    .trend-up { color: #16a34a; }
+    .trend-down { color: #ef4444; }
+  </style>
+</head>
+<body class="text-slate-800">
+
+  <!-- Header -->
+  <header class="bg-white border-b sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 bg-emerald-600 rounded-lg flex items-center justify-center text-white shadow-md">
+            <!-- Cart icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"></circle><circle cx="20" cy="20" r="1"></circle><path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold">FreshCart Grocery</h1>
+            <p class="text-xs text-slate-500 uppercase tracking-wide">Monthly Performance Dashboard</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Reporting: Jan 2024 - Aug 2025</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Revenue -->
+      <div class="glass-card p-5 flex items-center justify-between">
+        <div>
+          <p class="kpi-small">Total Revenue</p>
+          <h3 class="text-2xl font-bold" id="kpi-revenue">$0</h3>
+          <p class="text-xs mt-2"><span id="kpi-revenue-trend" class="trend-up">0%</span> vs last month</p>
+        </div>
+        <div class="p-3 bg-emerald-50 rounded-full text-emerald-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1v22"></path><path d="M20 8H10a3 3 0 000 6h8a3 3 0 010 6H6"></path></svg>
+        </div>
+      </div>
+
+      <!-- Cost -->
+      <div class="glass-card p-5 flex items-center justify-between">
+        <div>
+          <p class="kpi-small">Operational Cost</p>
+          <h3 class="text-2xl font-bold" id="kpi-cost">$0</h3>
+          <p class="text-xs mt-2"><span id="kpi-cost-trend" class="trend-down">0%</span> vs last month</p>
+        </div>
+        <div class="p-3 bg-rose-50 rounded-full text-rose-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10H7"></path><path d="M21 6H3"></path><path d="M21 14H11"></path></svg>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div class="glass-card p-5 flex items-center justify-between">
+        <div>
+          <p class="kpi-small">Order Volume</p>
+          <h3 class="text-2xl font-bold" id="kpi-orders">0</h3>
+          <p class="text-xs mt-2"><span id="kpi-orders-trend" class="trend-up">0%</span> vs last month</p>
+        </div>
+        <div class="p-3 bg-sky-50 rounded-full text-sky-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h18"></path><path d="M5 7h14"></path><path d="M9 19a2 2 0 11-4 0 2 2 0 014 0zM21 19a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        </div>
+      </div>
+
+      <!-- NPS -->
+      <div class="glass-card p-5 flex items-center justify-between">
+        <div>
+          <p class="kpi-small">NPS (Net Promoter Score)</p>
+          <h3 class="text-2xl font-bold" id="kpi-nps">0</h3>
+          <p class="text-xs mt-2 text-slate-500">Customer sentiment</p>
+        </div>
+        <div class="p-3 bg-yellow-50 rounded-full text-yellow-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9h.01M15 9h.01"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="border-b border-slate-200 mb-6">
+      <nav class="flex space-x-6 overflow-x-auto">
+        <button id="tab-descriptive" onclick="switchTab('descriptive')" class="py-3 px-1 border-b-2 border-emerald-500 text-emerald-600 font-medium">Descriptive Analytics</button>
+        <button id="tab-predictive" onclick="switchTab('predictive')" class="py-3 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-700">Predictive Analytics</button>
+        <button id="tab-prescriptive" onclick="switchTab('prescriptive')" class="py-3 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-700">Prescriptive Analytics</button>
+        <button id="tab-database" onclick="switchTab('database')" class="py-3 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-700">Company Database</button>
+      </nav>
+    </div>
+
+    <!-- Descriptive -->
+    <section id="descriptive" class="tab-content active">
+      <div class="bg-gradient-to-r from-emerald-50 to-sky-50 border border-emerald-100 rounded-xl p-6 mb-6">
+        <h3 class="font-bold text-emerald-900 text-lg">📈 Descriptive Summary</h3>
+        <p class="text-emerald-800 text-sm mt-2">
+          FreshCart shows steady revenue growth across 20 months, with order volume scaling due to marketing and new delivery zones. Delivery time improved after Q3 interventions, and NPS rose from 28 to 52. Operational costs grew but margins improved due to fulfillment optimizations.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass-card p-6">
+          <h4 class="font-bold text-slate-700 mb-4">Revenue vs Cost</h4>
+          <canvas id="chartRevenue"></canvas>
+        </div>
+        <div class="glass-card p-6">
+          <h4 class="font-bold text-slate-700 mb-4">Orders vs NPS</h4>
+          <canvas id="chartOrders"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Predictive -->
+    <section id="predictive" class="tab-content">
+      <div class="bg-gradient-to-r from-sky-50 to-indigo-50 border rounded-xl p-6 mb-6">
+        <h3 class="font-bold text-indigo-900 text-lg">🔮 Predictive Forecast</h3>
+        <p class="text-indigo-800 text-sm mt-2">
+          Using a simple trend projection, we expect orders and revenue to continue upward for the next three months. If delivery capacity is not scaled, late deliveries could increase and NPS may drop. Forecasts shown below are illustrative.
+        </p>
+      </div>
+
+      <div class="glass-card p-6">
+        <h4 class="font-bold text-slate-700 mb-4">Revenue & Orders Forecast</h4>
+        <div class="h-96">
+          <canvas id="chartPrediction"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prescriptive -->
+    <section id="prescriptive" class="tab-content">
+      <div class="bg-gradient-to-r from-yellow-50 to-amber-50 border rounded-xl p-6 mb-6">
+        <h3 class="font-bold text-amber-900 text-lg">💡 Prescriptive Recommendations</h3>
+        <ul class="list-disc list-inside text-amber-800 text-sm mt-2 space-y-2">
+          <li><strong>Expand micro-fulfillment hubs:</strong> Reduce delivery time by 20% and increase same-day fulfillment capacity.</li>
+          <li><strong>Dynamic dispatching:</strong> Use route optimization to reduce average delivery time and driver idle costs.</li>
+          <li><strong>Premium Delivery Tier:</strong> Offer priority slots for high-value customers to protect NPS while scaling volume.</li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass-card p-6">
+          <h4 class="font-bold text-slate-700 mb-4">Avg Delivery Time vs Target</h4>
+          <canvas id="chartDelivery"></canvas>
+        </div>
+        <div class="glass-card p-6 text-center">
+          <div class="w-40 h-40 rounded-full border-8 border-emerald-500 mx-auto flex items-center justify-center mb-4">
+            <div>
+              <span class="block text-3xl font-bold">22%</span>
+              <span class="text-xs text-slate-500 uppercase">Target Increase</span>
+            </div>
+          </div>
+          <h4 class="text-lg font-bold">Profitability Lift Goal</h4>
+          <p class="mt-2 text-slate-500">Automate simple customer queries and improve on-time delivery to improve margins ~3–5%.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Database -->
+    <section id="database" class="tab-content">
+      <div class="glass-card overflow-hidden">
+        <div class="px-6 py-4 border-b bg-gray-50">
+          <h3 class="text-lg font-medium">Company Database Records</h3>
+          <p class="text-sm text-slate-500 mt-1">20 monthly records with 6 variables.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-white">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Month</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Revenue</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Op. Cost</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Orders</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Avg Del. Time</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">NPS</th>
+              </tr>
+            </thead>
+            <tbody id="table-body" class="bg-white divide-y divide-gray-100">
+              <!-- JS populates -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 py-6 text-center text-slate-400 text-sm">
+    <p>© 2025 FreshCart Grocery — Internal Performance Dashboard</p>
+  </footer>
+
+  <!-- Script: Data + UI logic -->
+  <script>
+    // SAMPLE DATA: 20 months of FreshCart metrics
+    const DATASET = [
+      { id:1, month:'Jan 24', revenue:42000, opCost:27000, orders:1100, avgDel:34, nps:28 },
+      { id:2, month:'Feb 24', revenue:44000, opCost:28000, orders:1180, avgDel:33, nps:30 },
+      { id:3, month:'Mar 24', revenue:46000, opCost:28500, orders:1250, avgDel:35, nps:31 },
+      { id:4, month:'Apr 24', revenue:48000, opCost:29500, orders:1320, avgDel:36, nps:29 },
+      { id:5, month:'May 24', revenue:52000, opCost:30500, orders:1450, avgDel:38, nps:27 },
+      { id:6, month:'Jun 24', revenue:56000, opCost:32000, orders:1580, avgDel:40, nps:26 },
+      { id:7, month:'Jul 24', revenue:59000, opCost:33500, orders:1650, avgDel:39, nps:30 },
+      { id:8, month:'Aug 24', revenue:62000, opCost:34500, orders:1700, avgDel:36, nps:32 },
+      { id:9, month:'Sep 24', revenue:65000, opCost:35500, orders:1800, avgDel:34, nps:35 },
+      { id:10, month:'Oct 24', revenue:70000, opCost:37000, orders:1950, avgDel:32, nps:38 },
+      { id:11, month:'Nov 24', revenue:74000, opCost:38500, orders:2050, avgDel:31, nps:40 },
+      { id:12, month:'Dec 24', revenue:83000, opCost:41000, orders:2300, avgDel:30, nps:42 },
+      { id:13, month:'Jan 25', revenue:80000, opCost:39500, orders:2200, avgDel:29, nps:44 },
+      { id:14, month:'Feb 25', revenue:82000, opCost:40000, orders:2250, avgDel:28, nps:46 },
+      { id:15, month:'Mar 25', revenue:86000, opCost:41500, orders:2350, avgDel:27, nps:48 },
+      { id:16, month:'Apr 25', revenue:90000, opCost:43000, orders:2450, avgDel:26, nps:49 },
+      { id:17, month:'May 25', revenue:93000, opCost:44500, orders:2550, avgDel:25, nps:50 },
+      { id:18, month:'Jun 25', revenue:96000, opCost:45500, orders:2650, avgDel:24, nps:51 },
+      { id:19, month:'Jul 25', revenue:100000, opCost:47000, orders:2800, avgDel:23, nps:52 },
+      { id:20, month:'Aug 25', revenue:104000, opCost:48000, orders:2900, avgDel:22, nps:52 }
+    ];
+
+    // On load
+    document.addEventListener('DOMContentLoaded', () => {
+      initKPIs();
+      populateTable();
+      initCharts();
+    });
+
+    // Tab switcher
+    function switchTab(name) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(name).classList.add('active');
+
+      document.querySelectorAll('.tab-btn, nav button').forEach(b => {
+        // no-op (buttons classing handled individually)
+      });
+
+      // update tab button styles
+      ['descriptive','predictive','prescriptive','database'].forEach(t => {
+        const btn = document.getElementById('tab-' + t);
+        if (!btn) return;
+        if (t === name) {
+          btn.classList.add('border-emerald-500','text-emerald-600');
+          btn.classList.remove('border-transparent','text-slate-500');
+        } else {
+          btn.classList.remove('border-emerald-500','text-emerald-600');
+          btn.classList.add('border-transparent','text-slate-500');
+        }
+      });
+    }
+
+    // KPIs
+    function initKPIs() {
+      const current = DATASET[DATASET.length - 1];
+      const prev = DATASET[DATASET.length - 2];
+
+      // revenue
+      document.getElementById('kpi-revenue').textContent = '$' + current.revenue.toLocaleString();
+      const revTrend = (((current.revenue - prev.revenue) / prev.revenue) * 100).toFixed(1);
+      const revEl = document.getElementById('kpi-revenue-trend'); revEl.textContent = (revTrend > 0 ? '↑ ' : '↓ ') + Math.abs(revTrend) + '%';
+      revEl.className = revTrend >= 0 ? 'trend-up' : 'trend-down';
+
+      // cost
+      document.getElementById('kpi-cost').textContent = '$' + current.opCost.toLocaleString();
+      const costTrend = (((current.opCost - prev.opCost) / prev.opCost) * 100).toFixed(1);
+      const costEl = document.getElementById('kpi-cost-trend'); costEl.textContent = (costTrend > 0 ? '↑ ' : '↓ ') + Math.abs(costTrend) + '%';
+      costEl.className = costTrend >= 0 ? 'trend-down' : 'trend-up';
+
+      // orders
+      document.getElementById('kpi-orders').textContent = current.orders.toLocaleString();
+      const ordTrend = (((current.orders - prev.orders) / prev.orders) * 100).toFixed(1);
+      const ordEl = document.getElementById('kpi-orders-trend'); ordEl.textContent = (ordTrend > 0 ? '↑ ' : '↓ ') + Math.abs(ordTrend) + '%';
+      ordEl.className = ordTrend >= 0 ? 'trend-up' : 'trend-down';
+
+      // nps
+      document.getElementById('kpi-nps').textContent = current.nps;
+    }
+
+    // Table
+    function populateTable() {
+      const tbody = document.getElementById('table-body');
+      DATASET.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="px-6 py-4 text-sm font-medium">${row.id}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">${row.month}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">$${row.revenue.toLocaleString()}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">$${row.opCost.toLocaleString()}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">${row.orders.toLocaleString()}</td>
+          <td class="px-6 py-4 text-sm text-slate-600">${row.avgDel} min</td>
+          <td class="px-6 py-4 text-sm">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold ${row.nps >= 45 ? 'bg-emerald-100 text-emerald-800' : 'bg-yellow-100 text-yellow-800'}">${row.nps}</span>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Charts: Chart.js
+    function initCharts() {
+      const labels = DATASET.map(d => d.month);
+      const revenue = DATASET.map(d => d.revenue);
+      const costs = DATASET.map(d => d.opCost);
+      const orders = DATASET.map(d => d.orders);
+      const nps = DATASET.map(d => d.nps);
+      const avgDel = DATASET.map(d => d.avgDel);
+
+      // Revenue vs Cost
+      new Chart(document.getElementById('chartRevenue'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Revenue', data: revenue, borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.08)', fill: true, tension: 0.3 },
+            { label: 'Oper. Cost', data: costs, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.06)', fill: true, tension: 0.3 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      });
+
+      // Orders vs NPS (bar + line)
+      new Chart(document.getElementById('chartOrders'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Orders', data: orders, backgroundColor: '#0ea5e9', yAxisID: 'y' },
+            { label: 'NPS', data: nps, type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.06)', fill: false, yAxisID: 'y1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { position: 'left', title: { display: true, text: 'Orders' } },
+            y1: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, title: { display: true, text: 'NPS' } }
+          },
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+
+      // Prediction: simple projection (linear trend visual)
+      const projectedMonths = ['Sep 25','Oct 25','Nov 25'];
+      // create simple linear projection for revenue and orders (last slope)
+      const revenueSlope = (revenue[revenue.length-1] - revenue[0]) / (revenue.length - 1);
+      const ordersSlope = (orders[orders.length-1] - orders[0]) / (orders.length - 1);
+      const projectedRevenue = [
+        revenue[revenue.length-1] + revenueSlope * 1,
+        revenue[revenue.length-1] + revenueSlope * 2,
+        revenue[revenue.length-1] + revenueSlope * 3
+      ].map(v => Math.round(v));
+      const projectedOrders = [
+        orders[orders.length-1] + ordersSlope * 1,
+        orders[orders.length-1] + ordersSlope * 2,
+        orders[orders.length-1] + ordersSlope * 3
+      ].map(v => Math.round(v));
+
+      new Chart(document.getElementById('chartPrediction'), {
+        type: 'line',
+        data: {
+          labels: [...labels, ...projectedMonths],
+          datasets: [
+            { label: 'Actual Revenue', data: [...revenue, null, null, null], borderColor: '#059669', tension: 0.2 },
+            { label: 'Projected Revenue', data: [...Array(revenue.length-1).fill(null), revenue[revenue.length-1], ...projectedRevenue], borderColor: '#7c3aed', borderDash: [6,4], fill: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins:{ legend: { position: 'bottom' } } }
+      });
+
+      // Delivery time vs target
+      new Chart(document.getElementById('chartDelivery'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Avg Delivery Time (min)', data: avgDel, borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.06)', fill: true },
+            { label: 'Target (25 min)', data: new Array(labels.length).fill(25), borderColor: '#ef4444', borderDash: [5,5], pointRadius: 0, fill: false }
+          ]
+        },
+        options: { responsive: true, plugins:{ legend: { position: 'bottom' } } }
+      });
+    }
+  </script>
+
+</body>
+</html>
